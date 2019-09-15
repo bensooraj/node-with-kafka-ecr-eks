@@ -17,11 +17,11 @@ const kafka = require('kafka-node'),
 
     producer = new HighLevelProducer(client, {
         // Configuration for when to consider a message as acknowledged, default 1
-        requireAcks: global.config.PRODUCER_REQUIRE_ACKS,
+        requireAcks: 1, // PRODUCER_REQUIRE_ACKS
         // The amount of time in milliseconds to wait for all acks before considered, default 100ms
-        ackTimeoutMs: global.config.PRODUCER_ACKS_TIMEOUT,
+        ackTimeoutMs: 100, // PRODUCER_ACKS_TIMEOUT
         // Partitioner type (default = 0, random = 1, cyclic = 2, keyed = 3, custom = 4), default 0
-        partitionerType: global.config.PRODUCER_PARTITONER_TYPE,
+        partitionerType: 2, // PRODUCER_PARTITONER_TYPE
     });
 
 producer.on('ready', function () {
@@ -31,3 +31,13 @@ producer.on('ready', function () {
 producer.on('error', function (err) {
     console.log("Kafka HighLevelProducer Error: ", err);
 });
+
+module.exports = {
+    kafkaProducer: producer,
+    kafkaProduceMessage: (topic, messages, cb) => {
+        producer.send([{
+            topic,
+            messages: JSON.stringify(messages)
+        }], cb);
+    }
+}

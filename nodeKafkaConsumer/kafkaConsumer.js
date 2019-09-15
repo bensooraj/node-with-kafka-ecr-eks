@@ -48,7 +48,8 @@ consumerGroup.on('error', (error) => {
 });
 
 consumerGroup.on('message', async (message) => {
-
+    console.log("Message Received: ", message);
+    console.log("message.value: ", JSON.parse(message.value));
 });
 
 // module.exports = {

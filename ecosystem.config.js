@@ -8,7 +8,7 @@ module.exports = {
         // NodeJS API Application + Kafka Producer
         {
             name: 'nodejs-api-kafka-producer-app',
-            script: './nodeKafkaProducer',
+            script: './nodeKafkaProducer/bin/www',
         },
 
         // NodeJS Kafka Consumer Application
