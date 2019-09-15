@@ -1,19 +1,8 @@
+const messageHandler = require("./kafkaMessageHandler");
+
 const kafka = require('kafka-node'),
 
     ConsumerGroup = kafka.ConsumerGroup,
-
-    // client = new kafka.KafkaClient({
-    //     // A string of kafka broker/host combination delimited by comma
-    //     kafkaHost: "kafka1:9092", // BROKER_HOST
-    //     // ms it takes to wait for a successful connection before moving to the next host default: 10000
-    //     connectTimeout: "10000", // BROKER_CONNECT_TIMEOUT
-    //     // ms for a kafka request to timeout default: 30000
-    //     requestTimeout: "60000", // BROKER_REQUEST_TIMEOUT
-    //     // automatically connect when KafkaClient is instantiated otherwise you need to manually call connect default: true
-    //     autoConnect: true, // BROKER_AUTO_CONNECT
-    //     // maximum async operations at a time toward the kafka cluster. default: 10
-    //     maxAsyncRequests: 10, // BROKER_MAX_ASYNC_REQUESTS
-    // })
 
     consumerGroupOptions = {
         kafkaHost: 'kafka1:9092', // connect directly to kafka broker (instantiates a KafkaClient)
@@ -56,10 +45,12 @@ consumerGroup.on('rebalanced', () => {
 });
 
 consumerGroup.on('message', async (message) => {
-    console.log("Message Received: ", message);
-    console.log("message.value: ", JSON.parse(message.value));
-});
+    // console.log("Message Received: ", message);
 
-// module.exports = {
-//     consumerGroup
-// };
+    const messageValue = JSON.parse(message.value);
+    try {
+        await messageHandler(messageValue.type, messageValue.action, messageValue.params);
+    } catch (error) {
+        console.log("[Kafka Message Processing] Error: ", error);
+    }
+});

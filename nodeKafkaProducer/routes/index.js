@@ -10,11 +10,89 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET Test Kafka Message Production. */
-router.get('/kafka-test/:message', function (req, res, next) {
+router.get('/kafka-test/cyan/:message', function (req, res, next) {
 
     kafkaProduceMessage('s3-upload-topic', {
         type: 'TEST',
-        action: 'PROCESS_TEST_MESSAGE',
+        action: 'PAINT_MESSAGE_CYAN',
+        params: {
+            message: req.params['message']
+        }
+    }, (error, data) => {
+
+        if (error) {
+            return res.json({
+                message: req.params['message'],
+                error
+            });
+        }
+
+        res.json({
+            message: req.params['message'],
+            data
+        });
+    });
+
+});
+
+/* GET Test Kafka Message Production. */
+router.get('/kafka-test/green/:message', function (req, res, next) {
+
+    kafkaProduceMessage('s3-upload-topic', {
+        type: 'TEST',
+        action: 'PAINT_MESSAGE_GREEN',
+        params: {
+            message: req.params['message']
+        }
+    }, (error, data) => {
+
+        if (error) {
+            return res.json({
+                message: req.params['message'],
+                error
+            });
+        }
+
+        res.json({
+            message: req.params['message'],
+            data
+        });
+    });
+
+});
+
+/* GET Test Kafka Message Production. */
+router.get('/kafka-test/blue/:message', function (req, res, next) {
+
+    kafkaProduceMessage('s3-upload-topic', {
+        type: 'TEST',
+        action: 'PAINT_MESSAGE_BLUE',
+        params: {
+            message: req.params['message']
+        }
+    }, (error, data) => {
+
+        if (error) {
+            return res.json({
+                message: req.params['message'],
+                error
+            });
+        }
+
+        res.json({
+            message: req.params['message'],
+            data
+        });
+    });
+
+});
+
+/* GET Test Kafka Message Production. */
+router.get('/kafka-test/uppercase/:message', function (req, res, next) {
+
+    kafkaProduceMessage('s3-upload-topic', {
+        type: 'TEST',
+        action: 'TRANSFORM_MESSAGE_UPPERCASE',
         params: {
             message: req.params['message']
         }
