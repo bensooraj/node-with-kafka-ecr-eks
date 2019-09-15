@@ -47,6 +47,14 @@ consumerGroup.on('error', (error) => {
     console.log("Kafka Consumer Group Error: ", error);
 });
 
+consumerGroup.on('rebalancing', () => {
+    console.log("Kafka Consumer Group Rebalancing");
+});
+
+consumerGroup.on('rebalanced', () => {
+    console.log("Kafka Consumer Group Rebalanced");
+});
+
 consumerGroup.on('message', async (message) => {
     console.log("Message Received: ", message);
     console.log("message.value: ", JSON.parse(message.value));
