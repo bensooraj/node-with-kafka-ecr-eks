@@ -1,1 +1,4 @@
 node_modules
+kafkaProducer/node_modules
+nodeKafkaConsumer/node_modules
+.env

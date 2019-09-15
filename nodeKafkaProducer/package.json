@@ -1,5 +1,5 @@
 {
-    "name": "node-with-kafka-ecr-eks",
+    "name": "nodejs-api-kafka-producer-app",
     "version": "0.0.0",
     "private": true,
     "scripts": {

@@ -5,17 +5,17 @@ module.exports = {
      */
     apps: [
 
-        // NodeJS API Application
+        // NodeJS API Application + Kafka Producer
         {
-            name: 'nodejs-api-app',
-            script: './bin/www',
+            name: 'nodejs-api-kafka-producer-app',
+            script: './nodeKafkaProducer',
         },
 
         // NodeJS Kafka Consumer Application
-        // {
-        //     name: 'WEB',
-        //     script: 'web.js'
-        // }
+        {
+            name: 'nodejs-kafka-consumer-app',
+            script: './nodeKafkaConsumer/kafkaConsumer.js'
+        }
     ],
 
     /**
