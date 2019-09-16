@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const shortid = require('shortid');
-const moment = require('moment');
+const { kafkaProduceMessage } = require('../kafkaProducer');
 
 const multer = require('multer');
 const imageUploader = multer({
@@ -26,9 +26,28 @@ router.post('/upload', imageUploader.single('image_file'), function (req, res, n
 
     console.log("req.file: ", req.file);
 
-    res.json({
-        image_id: path.parse(req.file.filename).name
+    kafkaProduceMessage('s3-upload-topic', {
+        type: 'S3',
+        action: 'UPLOAD_IMAGE',
+        params: {
+            image_id: path.parse(req.file.filename).name,
+            image_filename: path.parse(req.file.filename).base
+        }
+    }, (error, data) => {
+
+        if (error) {
+            return res.json({
+                message: "Error uploading image.",
+                error,
+            });
+        }
+
+        res.json({
+            message: "Image upload initiated.",
+            image_id: path.parse(req.file.filename).name
+        });
     });
+
 });
 
 module.exports = router;

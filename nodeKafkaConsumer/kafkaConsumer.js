@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const messageHandler = require("./kafkaMessageHandler");
 
 const kafka = require('kafka-node'),
