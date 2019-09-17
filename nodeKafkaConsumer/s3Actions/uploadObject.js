@@ -1,7 +1,9 @@
 const fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    util = require('util');
 
 const { s3 } = require('../util/util')
+const { ResizeImageClient } = require('../grpcClients');
 
 const uploadImage = async (params) => {
     console.log("params: ", params);
@@ -23,10 +25,29 @@ const uploadImage = async (params) => {
         ACL: 'public-read'
     };
 
-    await s3.upload({
-        ...s3Params,
-    }).promise().catch((error) => {
-        console.log("S3 Upload Error: ", error);
+    // await s3.upload({
+    //     ...s3Params,
+    // }).promise().catch((error) => {
+    //     console.log("S3 Upload Error: ", error);
+    // });
+
+    // Call the Go GRPC Microservice for resizing the image and uploading
+    // them to s3
+
+    await new Promise((resolve, reject) => {
+        ResizeImageClient.ResizeImage({
+            image_id: imageID,
+            image_filename: imageFileName
+        }, function (err, response) {
+            if (err) {
+                console.log("resizeImagePromise | Error: ", err);
+                reject(err);
+                return;
+            }
+            console.log("resizeImagePromise | response: ", response);
+            resolve(response);
+            return;
+        })
     });
 
     return;

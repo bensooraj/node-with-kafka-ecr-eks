@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package resize_image_ms;
+
+option go_package = "resizeimagemspb";
+
+message ResizeImageRequest {
+    string image_id = 1;
+    string image_filename = 2;
+}
+
+message ResizeImageResponse {
+    bool images_resized = 1;
+}
+
+service ResizeImageMicroService {
+    rpc ResizeImage (ResizeImageRequest) returns (ResizeImageResponse) {};
+}
