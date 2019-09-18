@@ -25,11 +25,11 @@ const uploadImage = async (params) => {
         ACL: 'public-read'
     };
 
-    // await s3.upload({
-    //     ...s3Params,
-    // }).promise().catch((error) => {
-    //     console.log("S3 Upload Error: ", error);
-    // });
+    await s3.upload({
+        ...s3Params,
+    }).promise().catch((error) => {
+        console.log("S3 Upload Error: ", error);
+    });
 
     // Call the Go GRPC Microservice for resizing the image and uploading
     // them to s3
