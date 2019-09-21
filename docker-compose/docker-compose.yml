@@ -34,5 +34,23 @@ services:
        IMAGE_RESIZE_SERVICE_HOST: ${IMAGE_RESIZE_SERVICE_HOST}
        IMAGE_RESIZE_SERVICE_PORT: ${IMAGE_RESIZE_SERVICE_PORT}
        KAFKA_HOST: ${KAFKA_HOST}
+   
+   # Node.JS API And Kafka Producer
+   nodejs-consumer-service:
+     depends_on:
+       - mysql-service
+     image: nodejs-kafka-consumer-app:v1
+     volumes:
+       - ../image_uploads/:/app/image_uploads/
+    #  ports:
+    #    - "3000:3000"
+     restart: always
+     environment:
+       AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
+       AWS_S3_USER_ACCESS_KEY_ID: ${AWS_S3_USER_ACCESS_KEY_ID}
+       AWS_S3_USER_SECRET_ACCESS_KEY: ${AWS_S3_USER_SECRET_ACCESS_KEY}
+       IMAGE_RESIZE_SERVICE_HOST: ${IMAGE_RESIZE_SERVICE_HOST}
+       IMAGE_RESIZE_SERVICE_PORT: ${IMAGE_RESIZE_SERVICE_PORT}
+       KAFKA_HOST: ${KAFKA_HOST}
 volumes:
     db_data: {}

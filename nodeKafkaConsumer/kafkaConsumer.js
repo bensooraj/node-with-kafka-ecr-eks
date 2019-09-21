@@ -7,7 +7,7 @@ const kafka = require('kafka-node'),
     ConsumerGroup = kafka.ConsumerGroup,
 
     consumerGroupOptions = {
-        kafkaHost: 'kafka1:9092', // connect directly to kafka broker (instantiates a KafkaClient)
+        kafkaHost: `${process.env.KAFKA_HOST}:9092`, // connect directly to kafka broker (instantiates a KafkaClient)
         batch: undefined, // put client batch settings if you need them
         ssl: true, // optional (defaults to false) or tls options hash
         groupId: 'ExampleTestGroup',
