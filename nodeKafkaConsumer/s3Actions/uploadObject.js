@@ -2,7 +2,7 @@ const fs = require('fs'),
     path = require('path'),
     util = require('util');
 
-const { s3 } = require('../util/util')
+const { s3, dbConnection, dbQuery } = require('../util/util')
 const { ResizeImageClient } = require('../grpcClients');
 
 const uploadImage = async (params) => {
@@ -29,30 +29,40 @@ const uploadImage = async (params) => {
         ...s3Params,
     }).promise().catch((error) => {
         console.log("S3 Upload Error: ", error);
+        throw new Error(error);
     });
+
+    try {
+        const imageURL = `${process.env.IMAGE_HOST_DOMAIN_NAME}/${imageID}/${imageFileName}`
+        await dbQuery(`
+        INSERT INTO images (image_id, scale, image_url) 
+        VALUES (${dbConnection.escape(imageID)}, ${1}, ${dbConnection.escape(imageURL)})
+        `);
+    } catch (error) {
+        console.log("[DB Insert Call] Error: ", error);
+    }
 
     // Call the Go GRPC Microservice for resizing the image and uploading
     // them to s3
 
-    await new Promise((resolve, reject) => {
-        ResizeImageClient.ResizeImage({
-            image_id: imageID,
-            image_filename: imageFileName
-        }, function (err, response) {
-            if (err) {
-                console.log("resizeImagePromise | Error: ", err);
-                reject(err);
-                return;
-            }
-            console.log("resizeImagePromise | response: ", response);
-            resolve(response);
-            return;
-        })
-    });
+    // await new Promise((resolve, reject) => {
+    //     ResizeImageClient.ResizeImage({
+    //         image_id: imageID,
+    //         image_filename: imageFileName
+    //     }, function (err, response) {
+    //         if (err) {
+    //             console.log("resizeImagePromise | Error: ", err);
+    //             reject(err);
+    //             return;
+    //         }
+    //         console.log("resizeImagePromise | response: ", response);
+    //         resolve(response);
+    //         return;
+    //     })
+    // });
 
     return;
 };
-
 
 
 module.exports = {

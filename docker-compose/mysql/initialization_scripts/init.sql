@@ -7,5 +7,6 @@ CREATE TABLE images(
    PRIMARY KEY ( transaction_id )
 );
 
--- image_id INT NOT NULL AUTO_INCREMENT,  
+-- Grant All Privileges
+GRANT ALL PRIVILEGES ON *.* TO 'bensooraj'@'%';
 -- PRIMARY KEY ( cus_id )  
