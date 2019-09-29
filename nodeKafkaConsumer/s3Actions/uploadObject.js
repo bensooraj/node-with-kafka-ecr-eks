@@ -45,21 +45,21 @@ const uploadImage = async (params) => {
     // Call the Go GRPC Microservice for resizing the image and uploading
     // them to s3
 
-    // await new Promise((resolve, reject) => {
-    //     ResizeImageClient.ResizeImage({
-    //         image_id: imageID,
-    //         image_filename: imageFileName
-    //     }, function (err, response) {
-    //         if (err) {
-    //             console.log("resizeImagePromise | Error: ", err);
-    //             reject(err);
-    //             return;
-    //         }
-    //         console.log("resizeImagePromise | response: ", response);
-    //         resolve(response);
-    //         return;
-    //     })
-    // });
+    await new Promise((resolve, reject) => {
+        ResizeImageClient.ResizeImage({
+            image_id: imageID,
+            image_filename: imageFileName
+        }, function (err, response) {
+            if (err) {
+                console.log("resizeImagePromise | Error: ", err);
+                reject(err);
+                return;
+            }
+            console.log("resizeImagePromise | response: ", response);
+            resolve(response);
+            return;
+        })
+    });
 
     return;
 };
