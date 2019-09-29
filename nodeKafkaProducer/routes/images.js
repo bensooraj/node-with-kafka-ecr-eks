@@ -14,11 +14,45 @@ const imageUploader = multer({
     })
 });
 
+const { dbConnection, dbQuery } = require('../db');
+
 /* GET images listing */
-router.get('/', function (req, res, next) {
-    res.json({
-        message: "User"
-    });
+router.get('/', async function (req, res, next) {
+
+    try {
+        const result = await dbQuery(`SELECT * FROM images`);
+        return res.json({
+            images: result,
+            error: null
+        });
+    } catch (error) {
+        console.log("[DB Select Call] Error: ", error);
+        return res.json({
+            images: [],
+            error
+        });
+    }
+
+});
+
+/* GET images by imageID */
+router.get('/:image_id', async function (req, res, next) {
+
+    const imageID = req.params["image_id"];
+    try {
+        const result = await dbQuery(`SELECT * FROM images WHERE image_id=${dbConnection.escape(imageID)}`);
+        return res.json({
+            images: result,
+            error: null
+        });
+    } catch (error) {
+        console.log("[DB Select Call] Error: ", error);
+        return res.json({
+            images: [],
+            error
+        });
+    }
+
 });
 
 /* POST image upload */
