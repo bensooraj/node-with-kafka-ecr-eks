@@ -1,4 +1,5 @@
 FROM node:12.10
+RUN npm install pm2 -g
 
 WORKDIR /app
 COPY package.json /app

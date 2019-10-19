@@ -1,13 +1,21 @@
-FROM node:12.10
-RUN npm install pm2 -g
+FROM node:12.10 as base
 
 WORKDIR /app
-COPY package.json /app
-RUN npm install
 
+COPY package*.json /app/
 COPY . /app
-# COPY ecosystem.config.js /app
-CMD ["pm2-runtime", "start", "ecosystem.config.js", "--only", "nodejs-api-kafka-producer-app"]
+
+# Install app dependencies
+RUN npm install --only=production
+
+FROM node:12.10.0-slim as release
+WORKDIR /app
+
+# Source
+COPY --from=base /app .
+RUN ls
+
+CMD ["node", "./bin/www"]
 
 # replace this with your application's default port
 EXPOSE 3000
