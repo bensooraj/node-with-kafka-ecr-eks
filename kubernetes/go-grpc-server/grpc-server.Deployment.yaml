@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-grpc-image-resizer
+  name: go-grpc-image-resizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-grpc-image-resizer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: go-grpc-image-resizer
+    spec:
+      containers:
+      - image: bensooraj/demo-go-grpc-image-resizer:v1
+        name: demo-go-grpc-image-resizer
+        envFrom:
+          - configMapRef:
+              name: kafka-client-config
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /app/image_uploads
+        resources: {}
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: efs-claim
+status: {}
