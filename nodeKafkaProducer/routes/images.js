@@ -56,7 +56,7 @@ router.get('/:image_id', async function (req, res, next) {
 });
 
 /* POST image upload */
-router.post('/upload', imageUploader.single('image_file'), function (req, res, next) {
+router.post('/upload', imageUploader.single('image_file'), async function (req, res, next) {
 
     console.log("req.file: ", req.file);
     // Send message to kafka consumer to upload image to S3

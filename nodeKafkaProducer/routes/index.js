@@ -34,7 +34,7 @@ router.get('/kafka-test/cyan/:message', async function (req, res, next) {
 });
 
 /* GET Test Kafka Message Production. */
-router.get('/kafka-test/green/:message', function (req, res, next) {
+router.get('/kafka-test/green/:message', async function (req, res, next) {
     let recordMetadata = [];
     try {
         recordMetadata = await kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
@@ -58,7 +58,7 @@ router.get('/kafka-test/green/:message', function (req, res, next) {
 });
 
 /* GET Test Kafka Message Production. */
-router.get('/kafka-test/blue/:message', function (req, res, next) {
+router.get('/kafka-test/blue/:message', async function (req, res, next) {
     let recordMetadata = [];
     try {
         recordMetadata = await kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
@@ -82,7 +82,7 @@ router.get('/kafka-test/blue/:message', function (req, res, next) {
 });
 
 /* GET Test Kafka Message Production. */
-router.get('/kafka-test/uppercase/:message', function (req, res, next) {
+router.get('/kafka-test/uppercase/:message', async function (req, res, next) {
     try {
         recordMetadata = await kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
             type: 'TEST',

@@ -13,7 +13,6 @@ WORKDIR /app
 
 # Source
 COPY --from=base /app .
-RUN ls
 
 CMD ["node", "./bin/www"]
 
