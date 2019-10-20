@@ -21,7 +21,7 @@ services:
    nodejs-api-producer-service:
      depends_on:
        - mysql-service
-     image: nodejs-api-kafka-producer-app:v1
+     image: bensooraj/demo-node-producer:v1
      volumes:
        - ../image_uploads/:/app/image_uploads/
      ports:
@@ -44,7 +44,7 @@ services:
    nodejs-consumer-service:
      depends_on:
        - mysql-service
-     image: nodejs-kafka-consumer-app:v1
+     image: bensooraj/demo-node-consumer:v1
      volumes:
        - ../image_uploads/:/app/image_uploads/
     #  ports:
@@ -71,7 +71,7 @@ services:
        - mysql-service
        - nodejs-api-producer-service
        - nodejs-consumer-service
-     image: resizeimage_go_grpc_server:v1
+     image: bensooraj/demo-go-grpc-image-resizer:v1
      volumes:
        - ../image_uploads/:/app/image_uploads/
      ports:
