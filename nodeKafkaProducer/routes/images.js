@@ -59,29 +59,28 @@ router.get('/:image_id', async function (req, res, next) {
 router.post('/upload', imageUploader.single('image_file'), function (req, res, next) {
 
     console.log("req.file: ", req.file);
-
-    kafkaProduceMessage('s3-upload-topic', {
-        type: 'S3',
-        action: 'UPLOAD_IMAGE',
-        params: {
-            image_id: path.parse(req.file.filename).name,
-            image_filename: path.parse(req.file.filename).base
-        }
-    }, (error, data) => {
-
-        if (error) {
-            return res.json({
-                message: "Error uploading image.",
-                error,
-            });
-        }
-
-        res.json({
-            message: "Image upload initiated.",
-            image_id: path.parse(req.file.filename).name
+    // Send message to kafka consumer to upload image to S3
+    let recordMetadata = [];
+    try {
+        recordMetadata = await kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
+            type: 'S3',
+            action: 'UPLOAD_IMAGE',
+            params: {
+                image_id: path.parse(req.file.filename).name,
+                image_filename: path.parse(req.file.filename).base
+            }
         });
+    } catch (error) {
+        console.log(`[ERROR] POST /upload: `, error);
+        return res.json({
+            message: "Error uploading/producing message to Kafka.",
+            error
+        });
+    }
+    res.json({
+        message: "Image upload initiated.",
+        image_id: path.parse(req.file.filename).name
     });
-
 });
 
 module.exports = router;
