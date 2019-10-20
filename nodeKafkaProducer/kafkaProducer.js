@@ -4,6 +4,7 @@ let kafkaBrokers = [];
 if (process.env.KAFKA_BROKER_1 !== "") kafkaBrokers.push(`${process.env.KAFKA_BROKER_1}:9092`);
 if (process.env.KAFKA_BROKER_2 !== "") kafkaBrokers.push(`${process.env.KAFKA_BROKER_2}:9092`);
 if (process.env.KAFKA_BROKER_3 !== "") kafkaBrokers.push(`${process.env.KAFKA_BROKER_3}:9092`);
+console.log("[Kafka Producer] kafkaBrokers: ", kafkaBrokers);
 
 const kafka = new Kafka({
     clientId: 'kafka-node-producer',
