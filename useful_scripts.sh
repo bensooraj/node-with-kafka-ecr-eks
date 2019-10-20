@@ -11,3 +11,8 @@ docker build -t bensooraj/demo-node-consumer:v1 .
 
 # Restart one Docker service by updating the image
 docker-compose -f docker-compose/docker-compose.yml up -d --no-deps nodejs-consumer-service
+
+# MySQL connection string
+mysql -h mysql-service -P 3306 -u admin -p'pass+word'
+# Quick check
+kubectl run -i --tty --rm debug --image=mysql --restart=Never -- mysql -h mysql-service -P 3306 -u admin -p'pass+word'

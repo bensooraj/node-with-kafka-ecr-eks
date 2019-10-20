@@ -5,7 +5,7 @@ metadata:
     app: node-test-consumer
   name: node-test-consumer
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: node-test-consumer
@@ -16,10 +16,17 @@ spec:
         app: node-test-consumer
     spec:
       containers:
-      - image: bensooraj/nodejs-strimzi-kafka-test-consumer:3b.plain.v1
-        name: nodejs-strimzi-kafka-test-consumer
+      - image: bensooraj/demo-node-consumer:v1
+        name: demo-node-consumer
         envFrom:
           - configMapRef:
               name: kafka-client-config
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /app/image_uploads
         resources: {}
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: efs-claim
 status: {}

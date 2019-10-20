@@ -16,10 +16,17 @@ spec:
         app: node-test-producer
     spec:
       containers:
-      - image: bensooraj/nodejs-strimzi-kafka-test-producer:3b.plain.v1
-        name: nodejs-strimzi-kafka-test-producer
+      - image: bensooraj/demo-node-producer:v1
+        name: demo-node-producer
         envFrom:
           - configMapRef:
               name: kafka-client-config
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /app/image_uploads
         resources: {}
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: efs-claim
 status: {}
